@@ -14,21 +14,22 @@ namespace AICalendar.Api.Controllers;
 [Produces("application/json")]
 public class NaturalLanguageController : ControllerBase
 {
-    private readonly ILlmService _llmService;
-    private readonly IEventService _eventService;
-    private readonly ILogger<NaturalLanguageController> _logger;
+        private readonly ILlmService _llmService;
+        private readonly IMcpService _mcpService;
+        private readonly IEventService _eventService;
+        private readonly ILogger<NaturalLanguageController> _logger;
 
-    public NaturalLanguageController(
-        ILlmService llmService,
-        IEventService eventService,
-        ILogger<NaturalLanguageController> logger)
-    {
-        _llmService = llmService;
-        _eventService = eventService;
-        _logger = logger;
-    }
-
-    /// <summary>
+        public NaturalLanguageController(
+            ILlmService llmService, 
+            IMcpService mcpService,
+            IEventService eventService,
+            ILogger<NaturalLanguageController> logger)
+        {
+            _llmService = llmService;
+            _mcpService = mcpService;
+            _eventService = eventService;
+            _logger = logger;
+        }    /// <summary>
     /// Process natural language calendar command
     /// </summary>
     /// <param name="request">Natural language request</param>
@@ -75,77 +76,33 @@ public class NaturalLanguageController : ControllerBase
                 });
             }
 
-            // Step 2: Execute the calendar operation
-            Event? resultEvent = null;
-            string responseMessage;
-
-            switch (parseResult.Operation.OperationType)
+            // Step 2: Execute the calendar operation through MCP
+            var mcpRequest = CreateMcpRequestFromOperation(parseResult.Operation);
+            var mcpResult = await _mcpService.ExecuteToolAsync(mcpRequest);
+            
+            if (!mcpResult.Success)
             {
-                case CalendarOperationType.CreateEvent:
-                    if (parseResult.Operation.EventData != null)
+                _logger.LogWarning("MCP execution failed: {Error}", mcpResult.Error);
+                return BadRequest(new ErrorResponse
+                {
+                    Error = new ErrorDetails
                     {
-                        resultEvent = await _eventService.CreateEventAsync(parseResult.Operation.EventData);
-                        responseMessage = await _llmService.GenerateResponseAsync(parseResult.Operation, true);
+                        Code = "MCP_EXECUTION_FAILED",
+                        Message = mcpResult.Error ?? "MCP tool execution failed",
+                        TraceId = HttpContext.TraceIdentifier
                     }
-                    else
-                    {
-                        responseMessage = "I couldn't extract enough information to create the event. Please provide more details.";
-                    }
-                    break;
-
-                case CalendarOperationType.FindEvent:
-                    var events = await _eventService.GetAllEventsAsync();
-                    var filteredEvents = FilterEventsByOperation(events.ToList(), parseResult.Operation);
-                    responseMessage = $"I found {filteredEvents.Count} matching events.";
-                    break;
-
-                case CalendarOperationType.UpdateEvent:
-                    if (parseResult.Operation.EventData != null)
-                    {
-                        resultEvent = await _eventService.UpdateEventAsync(parseResult.Operation.EventData);
-                        responseMessage = await _llmService.GenerateResponseAsync(parseResult.Operation, resultEvent != null);
-                    }
-                    else
-                    {
-                        responseMessage = "I need event details to update. Please provide more information.";
-                    }
-                    break;
-
-                case CalendarOperationType.DeleteEvent:
-                    if (parseResult.Operation.EventData?.Id != null)
-                    {
-                        var deleted = await _eventService.CancelEventAsync(parseResult.Operation.EventData.Id);
-                        responseMessage = await _llmService.GenerateResponseAsync(parseResult.Operation, deleted);
-                    }
-                    else
-                    {
-                        responseMessage = "I need an event ID to delete. Please specify which event you want to remove.";
-                    }
-                    break;
-
-                case CalendarOperationType.CheckAvailability:
-                    var allEvents = await _eventService.GetAllEventsAsync();
-                    var conflictCheck = await _llmService.CheckConflictsAsync(parseResult.Operation.EventData!, allEvents.ToList());
-                    responseMessage = conflictCheck.Message;
-                    break;
-
-                case CalendarOperationType.SuggestMeetingTime:
-                    var existingEvents = await _eventService.GetAllEventsAsync();
-                    var suggestions = await _llmService.GenerateEventSuggestionsAsync(request.Command, existingEvents.ToList());
-                    responseMessage = $"I have {suggestions.Count} meeting time suggestions for you.";
-                    break;
-
-                default:
-                    responseMessage = "I'm not sure how to help with that. Can you please rephrase your request?";
-                    break;
+                });
             }
+
+            // Step 3: Generate natural language response
+            var responseMessage = await _llmService.GenerateResponseAsync(parseResult.Operation, mcpResult.Success);
 
             var response = new NaturalLanguageResponse
             {
                 Success = true,
                 Message = responseMessage,
                 Operation = parseResult.Operation,
-                Event = resultEvent,
+                Event = mcpResult.Result as Event,
                 ProcessingTime = parseResult.ProcessingTime,
                 Suggestions = parseResult.Suggestions
             };
@@ -260,6 +217,44 @@ public class NaturalLanguageController : ControllerBase
         };
 
         return Ok(new ExamplesResponse { Examples = examples });
+    }
+
+    private McpToolRequest CreateMcpRequestFromOperation(CalendarOperation operation)
+    {
+        // Map CalendarOperation to appropriate MCP tool
+        string toolName = operation.OperationType switch
+        {
+            CalendarOperationType.CreateEvent => "save_event",
+            CalendarOperationType.UpdateEvent => "update_event",
+            CalendarOperationType.DeleteEvent => "cancel_event",
+            CalendarOperationType.FindEvent => "find_events",
+            CalendarOperationType.CheckAvailability => "check_availability",
+            _ => "find_events"
+        };
+
+        var arguments = new Dictionary<string, object>();
+        
+        if (operation.EventData != null)
+        {
+            arguments["event"] = operation.EventData;
+        }
+
+        if (operation.ExtractedEntities.Any())
+        {
+            arguments["query"] = string.Join(" ", operation.ExtractedEntities);
+        }
+
+        // Add parsed intent for context
+        if (!string.IsNullOrEmpty(operation.ParsedIntent))
+        {
+            arguments["intent"] = operation.ParsedIntent;
+        }
+
+        return new McpToolRequest
+        {
+            ToolName = toolName,
+            Arguments = arguments
+        };
     }
 
     private List<Event> FilterEventsByOperation(List<Event> events, CalendarOperation operation)
