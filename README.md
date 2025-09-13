@@ -2,23 +2,23 @@
 
 A comprehensive .NET 9 calendar application with AI-powered natural language processing capabilities using local LLMs (Ollama/Llama) and Model Context Protocol (MCP) server integration.
 
-## 🌟 Features
+##  Features
 
 ### Core Calendar Functionality
-- ✅ **Event Management**: Create, read, update, delete calendar events
-- ✅ **Event Validation**: Business rules and data validation
-- ✅ **Recurring Events**: Support for repeating calendar events
-- ✅ **Event Search**: Find events by various criteria
-- ✅ **Event Reminders**: Notification system for upcoming events
+- **Event Management**: Create, read, update, delete calendar events
+- **Event Validation**: Business rules and data validation
+- **Recurring Events**: Support for repeating calendar events
+- **Event Search**: Find events by various criteria
+- **Event Reminders**: Notification system for upcoming events
 
 ### AI-Powered Natural Language Processing
-- 🤖 **Local LLM Integration**: Uses Ollama/Llama models for offline processing
-- 🗣️ **Natural Language Commands**: Process calendar operations via plain English
-- 🔧 **MCP Server**: Model Context Protocol implementation with calendar tools
-- 🧠 **Intent Recognition**: Understands user intent and extracts calendar operations
-- ⚡ **Smart Suggestions**: Conflict detection and meeting time recommendations
+- **Local LLM Integration**: Uses Ollama/Llama models for offline processing
+- **Natural Language Commands**: Process calendar operations via plain English
+- **MCP Server**: Model Context Protocol implementation with calendar tools
+- **Intent Recognition**: Understands user intent and extracts calendar operations
+- **Smart Suggestions**: Conflict detection and meeting time recommendations
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Design
 ```
@@ -57,13 +57,13 @@ The MCP server provides 5 specialized calendar tools:
 5. **check_availability** - Detect conflicts and suggest times
 
 Each tool includes:
-- ✅ Input validation with JSON schemas
-- ✅ Idempotency handling for safe retries
-- ✅ Comprehensive error handling
-- ✅ Database transaction support
-- ✅ Proper response formatting
+- Input validation with JSON schemas
+- Idempotency handling for safe retries
+- Comprehensive error handling
+- Database transaction support
+- Proper response formatting
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **.NET 9 SDK** or later
@@ -104,7 +104,7 @@ If Ollama is not running, you'll see:
 LLM Service initialization: Failed - Ollama may not be running
 ```
 
-## 🧪 Testing Natural Language Commands
+## Testing Natural Language Commands
 
 ### Example Commands
 Use the `/api/naturallanguage/command` endpoint with these example inputs:
@@ -169,7 +169,7 @@ Use the `/api/naturallanguage/command` endpoint with these example inputs:
 }
 ```
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### Natural Language Processing
 - `POST /api/naturallanguage/command` - Process natural language calendar commands
@@ -184,7 +184,7 @@ Use the `/api/naturallanguage/command` endpoint with these example inputs:
 - `PUT /api/events/{id}` - Update event
 - `DELETE /api/events/{id}` - Delete event
 
-## 🔍 End-to-End Workflow Testing
+## End-to-End Workflow Testing
 
 ### 1. Test Natural Language Processing
 ```bash
@@ -205,7 +205,7 @@ curl -X POST "https://localhost:7071/api/naturallanguage/command" \
   -d '{"command": "Show me all my meetings with John"}'
 ```
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -252,7 +252,7 @@ The application is designed to work completely offline once Ollama and the Llama
 **Database:**
 Uses in-memory database by default for easy testing. For production, configure a persistent database in `appsettings.json`.
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 ### Unit Tests
 ```bash
@@ -268,28 +268,28 @@ The application includes comprehensive integration tests covering:
 
 ### Manual Testing Checklist
 
-1. **✅ End-to-End Functionality**
-   - [ ] Natural language command creates event in database
-   - [ ] Created event can be queried and retrieved
-   - [ ] Event modifications persist correctly
+1. ** End-to-End Functionality**
+   Natural language command creates event in database
+   Created event can be queried and retrieved
+   Event modifications persist correctly
 
-2. **✅ Local LLM Integration**
-   - [ ] Application works without internet connection
-   - [ ] Ollama service responds correctly
-   - [ ] LLM generates appropriate responses
+2. ** Local LLM Integration**
+   Application works without internet connection
+   Ollama service responds correctly
+   LLM generates appropriate responses
 
-3. **✅ MCP Server & Tools**
-   - [ ] All 5 MCP tools execute successfully
-   - [ ] Proper validation and error handling
-   - [ ] Idempotent operations work correctly
-   - [ ] Database transactions handle failures
+3. ** MCP Server & Tools**
+   -  All 5 MCP tools execute successfully
+   -  Proper validation and error handling
+   -  Idempotent operations work correctly
+   -  Database transactions handle failures
 
-4. **✅ API Orchestration**
-   - [ ] LLM correctly selects appropriate MCP tools
-   - [ ] Tool execution results in proper database operations
-   - [ ] Response generation provides meaningful feedback
+4. ** API Orchestration**
+   -  LLM correctly selects appropriate MCP tools
+     Tool execution results in proper database operations
+   -  Response generation provides meaningful feedback
 
-## 📚 Technical Implementation Details
+##  Technical Implementation Details
 
 ### LLM Integration Architecture
 - **Ollama Client**: HTTP-based communication with local Ollama server
@@ -309,15 +309,15 @@ The application includes comprehensive integration tests covering:
 - **Transaction Management**: ACID compliance for data consistency
 - **Migration Support**: Database schema versioning
 
-## 🎯 Evaluation Criteria Compliance
+##  Evaluation Criteria Compliance
 
-✅ **End-to-End Functionality**: Natural language commands persist structured Events in database and allow querying
-✅ **Local LLM Integration**: Complete offline operation using Ollama/Llama models
-✅ **MCP Server & Tools Design**: 5 specialized tools with validation, idempotency, and error handling
-✅ **API and MCP Orchestration**: Proper tool selection and execution by LLM
-✅ **Documentation**: Comprehensive setup, usage, and troubleshooting guide
+ **End-to-End Functionality**: Natural language commands persist structured Events in database and allow querying
+ **Local LLM Integration**: Complete offline operation using Ollama/Llama models
+ **MCP Server & Tools Design**: 5 specialized tools with validation, idempotency, and error handling
+ **API and MCP Orchestration**: Proper tool selection and execution by LLM
+ **Documentation**: Comprehensive setup, usage, and troubleshooting guide
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -325,11 +325,11 @@ The application includes comprehensive integration tests covering:
 4. Add tests for new functionality
 5. Submit a pull request
 
-## 📄 License
+ 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Ollama** for providing excellent local LLM capabilities
 - **Model Context Protocol** for standardized tool interaction
