@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {}
+    "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {}
   },
   "projects": {
-    "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
+    "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj",
         "projectName": "AICalendar.Domain",
-        "projectPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj",
+        "projectPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\obj\\",
+        "outputPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"

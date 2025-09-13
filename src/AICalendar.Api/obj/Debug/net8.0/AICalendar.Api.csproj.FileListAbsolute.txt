@@ -142,3 +142,4 @@ C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalenda
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Api\obj\Debug\net8.0\AICalendar.Api.pdb
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Api\obj\Debug\net8.0\AICalendar.Api.genruntimeconfig.cache
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Api\obj\Debug\net8.0\ref\AICalendar.Api.dll
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Api\obj\Debug\net8.0\AICalendar.Api.sourcelink.json

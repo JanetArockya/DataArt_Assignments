@@ -9,3 +9,4 @@ C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalenda
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net8.0\refint\AICalendar.Domain.dll
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net8.0\AICalendar.Domain.pdb
 C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net8.0\ref\AICalendar.Domain.dll
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net8.0\AICalendar.Domain.sourcelink.json

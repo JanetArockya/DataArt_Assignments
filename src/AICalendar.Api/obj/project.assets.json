@@ -4630,11 +4630,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
       "projectName": "AICalendar.Api",
-      "projectPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
+      "projectPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\obj\\",
+      "outputPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4652,8 +4652,8 @@
             "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Data\\AICalendar.Data.csproj": {
               "projectPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Data\\AICalendar.Data.csproj"
             },
-            "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
-              "projectPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj"
+            "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
+              "projectPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj"
             }
           }
         }

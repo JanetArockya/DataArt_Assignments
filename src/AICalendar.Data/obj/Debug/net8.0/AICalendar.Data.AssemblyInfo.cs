@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AICalendar.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+687813174f6f60e5f767fa8ac717531be5e116f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("AICalendar.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AICalendar.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

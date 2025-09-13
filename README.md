@@ -130,10 +130,135 @@ The API will be available at:
 - [x] Set up dependency injection and service registration
 - [x] Added Swagger for API documentation
 
-### 🚧 Next Steps (Homework 2-4)
-- [ ] API style comparison and contract definition
+### ✅ Homework 2 - API Design & Contract Definition
+
+#### API Style Decision: REST
+After thorough analysis of **gRPC vs GraphQL vs REST**, we chose **REST** for the AI Calendar API.
+
+**Comparison Summary:**
+- **REST**: ✅ Universal client support, mature ecosystem, simple CRUD operations
+- **GraphQL**: � Great for complex queries but learning curve and security concerns
+- **gRPC**: 🟡 Excellent performance but limited browser support
+
+**Decision Factors:**
+1. **Universal Compatibility**: All clients (web, mobile, AI systems) support REST
+2. **Team Productivity**: Familiar technology stack reduces development time
+3. **Ecosystem Maturity**: Rich tooling for documentation, testing, and monitoring
+4. **Simple Domain**: Calendar CRUD operations map naturally to REST verbs
+
+#### Contract Overview
+- **API Version**: v1.0.0 with URL-based versioning (`/api/v1/`)
+- **Contract Format**: OpenAPI 3.1 specification
+- **Location**: [`/contracts/openapi.yaml`](./contracts/openapi.yaml)
+- **Breaking Change Policy**: 6-month deprecation notice with migration guides
+
+#### Core API Endpoints
+
+##### Event Management
+```http
+GET    /api/v1/events                    # List events with pagination & filtering
+POST   /api/v1/events                    # Create event (idempotent via clientReferenceId)
+GET    /api/v1/events/{id}               # Get specific event
+PUT    /api/v1/events/{id}               # Update event
+DELETE /api/v1/events/{id}               # Cancel event
+PATCH  /api/v1/events/{id}/reschedule    # Reschedule event
+```
+
+##### Attendee Management
+```http
+GET    /api/v1/events/{id}/attendees           # List event attendees
+POST   /api/v1/events/{id}/attendees           # Add attendee
+DELETE /api/v1/events/{id}/attendees/{email}   # Remove attendee
+```
+
+##### Specialized Queries
+```http
+GET /api/v1/events/range?startDate={date}&endDate={date}  # Date range query
+GET /api/v1/events/attendee/{email}                       # Events by attendee
+GET /api/v1/health                                        # Health check
+```
+
+#### Example API Calls
+
+**Create Event:**
+```bash
+curl -X POST https://localhost:7001/api/v1/events \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Team Standup",
+    "startTime": "2024-09-14T09:00:00Z",
+    "endTime": "2024-09-14T09:30:00Z",
+    "timeZone": "America/New_York",
+    "clientReferenceId": "standup-2024-09-14",
+    "attendees": [
+      {"name": "John Doe", "email": "john@company.com", "isOrganizer": true}
+    ]
+  }'
+```
+
+**Get Events by Date Range:**
+```bash
+curl "https://localhost:7001/api/v1/events/range?startDate=2024-09-01T00:00:00Z&endDate=2024-09-30T23:59:59Z&timeZone=UTC"
+```
+
+**List Events with Pagination:**
+```bash
+curl "https://localhost:7001/api/v1/events?page=1&size=50&sort=startTime:asc&attendee=john@company.com"
+```
+
+#### Versioning & Deprecation Policy
+- **Current Version**: v1.0.0
+- **Versioning Strategy**: URL-based (`/api/v1/`, `/api/v2/`)
+- **Breaking Changes**: Require new major version
+- **Deprecation Timeline**: 6 months minimum support
+- **Migration Support**: Detailed guides and transition periods
+
+#### Security Implementation
+- **Authentication**: JWT Bearer tokens
+- **Authorization**: Role-based access control
+- **Rate Limiting**: 1000 requests/hour per user, 10000/hour per IP
+- **Input Validation**: Comprehensive schema validation
+- **Error Handling**: Structured error responses with trace IDs
+
+#### Local Development Setup
+```bash
+# Clone repository
+git clone https://github.com/JanetArockya/DataArt_Assignments.git
+cd DataArt_Assignments
+
+# Restore dependencies
+dotnet restore
+
+# Build solution
+dotnet build
+
+# Run API
+dotnet run --project src/AICalendar.Api/AICalendar.Api.csproj
+```
+
+**API URLs:**
+- Development: `https://localhost:7001/api/v1`
+- Swagger UI: `https://localhost:7001/swagger`
+- Health Check: `https://localhost:7001/api/v1/health`
+
+#### Performance Features
+- **Pagination**: Page-based with metadata (page, size, total, hasNext/Previous)
+- **Filtering**: Date ranges, attendees, status, location
+- **Sorting**: Multiple sort criteria supported
+- **Caching**: HTTP headers and conditional requests
+- **Rate Limiting**: Configurable limits with headers
+
+#### Known Limitations
+- **Real-time Updates**: Currently polling-based; WebSocket support planned
+- **Bulk Operations**: Limited batch support; individual API calls required
+- **File Attachments**: Not yet implemented
+- **Advanced Recurrence**: Basic patterns only; complex rules in development
+- **Multi-tenant**: Single tenant support; isolation features planned
+
+### 🚧 Next Steps (Homework 3-4)
 - [ ] .NET 9 upgrade and C# 13 features implementation
 - [ ] Local LLM integration and MCP server development
+- [ ] End-to-end testing and validation
 
 ## Contributing
 

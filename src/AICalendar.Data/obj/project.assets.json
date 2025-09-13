@@ -2821,8 +2821,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
-              "projectPath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj"
+            "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj": {
+              "projectPath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj"
             }
           }
         }

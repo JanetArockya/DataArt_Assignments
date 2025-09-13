@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Ui7Qcg1+2f0=",
+  "dgSpecHash": "cj6snePXHWA=",
   "success": true,
-  "projectFilePath": "c:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
+  "projectFilePath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Api\\AICalendar.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

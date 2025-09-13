@@ -1,0 +1,677 @@
+openapi: 3.1.0
+info:
+  title: AI Calendar API
+  version: 1.0.0
+  description: |
+    REST API for AI Calendar application supporting event management, 
+    attendee coordination, and natural language processing integration.
+    
+    ## Breaking Change Policy
+    - Major versions (v1, v2) may introduce breaking changes
+    - Minor versions maintain backward compatibility
+    - Deprecated features will be supported for 6 months minimum
+    - All breaking changes will be documented with migration guides
+    
+    ## Versioning Strategy
+    - URL-based versioning: `/api/v1/`
+    - Current version: v1.0.0
+    - Deprecation warnings included in response headers
+  contact:
+    name: AI Calendar API Support
+    email: support@aicalendar.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://localhost:7001/api/v1
+    description: Development server
+  - url: https://api.aicalendar.com/v1
+    description: Production server
+
+# Security schemes
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+
+  schemas:
+    Event:
+      type: object
+      required:
+        - title
+        - startTime
+        - endTime
+        - timeZone
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        title:
+          type: string
+          maxLength: 200
+          example: "Team Standup Meeting"
+        description:
+          type: string
+          maxLength: 1000
+          nullable: true
+          example: "Daily team synchronization and planning"
+        startTime:
+          type: string
+          format: date-time
+          example: "2024-09-14T09:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2024-09-14T09:30:00Z"
+        location:
+          type: string
+          maxLength: 100
+          nullable: true
+          example: "Conference Room A"
+        timeZone:
+          type: string
+          maxLength: 50
+          default: "UTC"
+          example: "America/New_York"
+        isAllDay:
+          type: boolean
+          default: false
+        status:
+          type: string
+          enum: [tentative, confirmed, cancelled]
+          default: confirmed
+        clientReferenceId:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: "Client-provided unique identifier for idempotency"
+          example: "meeting-2024-09-14-standup"
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        attendees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attendee'
+        reminders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reminder'
+        recurrenceRule:
+          $ref: '#/components/schemas/RecurrenceRule'
+          nullable: true
+
+    Attendee:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: "john.doe@company.com"
+        status:
+          type: string
+          enum: [pending, accepted, declined, tentative]
+          default: pending
+        isOrganizer:
+          type: boolean
+          default: false
+
+    Reminder:
+      type: object
+      required:
+        - reminderTime
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reminderTime:
+          type: string
+          format: date-time
+          example: "2024-09-14T08:45:00Z"
+        message:
+          type: string
+          maxLength: 500
+          nullable: true
+          example: "Meeting starts in 15 minutes"
+        type:
+          type: string
+          enum: [email, popup, sms]
+          default: email
+        isSent:
+          type: boolean
+          readOnly: true
+          default: false
+
+    RecurrenceRule:
+      type: object
+      required:
+        - frequency
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        frequency:
+          type: string
+          enum: [daily, weekly, monthly, yearly]
+        interval:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 2
+        daysOfWeek:
+          type: array
+          items:
+            type: string
+            enum: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
+          example: [monday, wednesday, friday]
+        dayOfMonth:
+          type: integer
+          minimum: 1
+          maximum: 31
+          nullable: true
+        weekOfMonth:
+          type: integer
+          minimum: 1
+          maximum: 5
+          nullable: true
+        monthOfYear:
+          type: integer
+          minimum: 1
+          maximum: 12
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        occurrenceCount:
+          type: integer
+          minimum: 1
+          nullable: true
+
+    RescheduleRequest:
+      type: object
+      required:
+        - newStartTime
+        - newEndTime
+      properties:
+        newStartTime:
+          type: string
+          format: date-time
+          example: "2024-09-14T10:00:00Z"
+        newEndTime:
+          type: string
+          format: date-time
+          example: "2024-09-14T10:30:00Z"
+
+    PaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+              example: 1
+            size:
+              type: integer
+              example: 50
+            total:
+              type: integer
+              example: 500
+            totalPages:
+              type: integer
+              example: 10
+            hasNext:
+              type: boolean
+              example: true
+            hasPrevious:
+              type: boolean
+              example: false
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "The request contains invalid data"
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: "endTime"
+                  message:
+                    type: string
+                    example: "End time must be after start time"
+            traceId:
+              type: string
+              example: "abc123def456"
+
+paths:
+  /events:
+    get:
+      summary: List events
+      description: |
+        Retrieve a paginated list of calendar events with optional filtering.
+        Supports filtering by date range, attendee, status, and other criteria.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Filter events starting from this date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Filter events ending before this date
+        - name: attendee
+          in: query
+          schema:
+            type: string
+            format: email
+          description: Filter events by attendee email
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [tentative, confirmed, cancelled]
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: timeZone
+          in: query
+          schema:
+            type: string
+            default: "UTC"
+          description: Convert times to this timezone
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: "startTime:asc"
+            enum: [startTime:asc, startTime:desc, createdAt:asc, createdAt:desc]
+      responses:
+        '200':
+          description: Successfully retrieved events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginationResponse'
+          headers:
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication required
+        '429':
+          description: Rate limit exceeded
+
+    post:
+      summary: Create event
+      description: |
+        Create a new calendar event. If clientReferenceId is provided,
+        the operation is idempotent - subsequent calls with the same
+        clientReferenceId will return the existing event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '200':
+          description: Event already exists (idempotent operation)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid event data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict (e.g., double booking)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /events/{id}:
+    get:
+      summary: Get event by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: timeZone
+          in: query
+          schema:
+            type: string
+            default: "UTC"
+      responses:
+        '200':
+          description: Event found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+
+    put:
+      summary: Update event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Event updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+        '400':
+          description: Invalid event data
+
+    delete:
+      summary: Cancel event
+      description: Marks the event as cancelled but doesn't delete it
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Event cancelled successfully
+        '404':
+          description: Event not found
+
+  /events/{id}/reschedule:
+    patch:
+      summary: Reschedule event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RescheduleRequest'
+      responses:
+        '200':
+          description: Event rescheduled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+        '400':
+          description: Invalid reschedule data
+
+  /events/{id}/attendees:
+    get:
+      summary: List event attendees
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of attendees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attendee'
+
+    post:
+      summary: Add attendee to event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attendee'
+      responses:
+        '201':
+          description: Attendee added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '409':
+          description: Attendee already exists
+
+  /events/{id}/attendees/{email}:
+    delete:
+      summary: Remove attendee from event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: Attendee removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event or attendee not found
+
+  /events/range:
+    get:
+      summary: Get events by date range
+      description: Optimized endpoint for calendar views and date-based queries
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: timeZone
+          in: query
+          schema:
+            type: string
+            default: "UTC"
+        - name: includeRecurring
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Whether to expand recurring events
+      responses:
+        '200':
+          description: Events in specified date range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /events/attendee/{email}:
+    get:
+      summary: Get events for specific attendee
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, accepted, declined, tentative]
+      responses:
+        '200':
+          description: Events for the attendee
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  # Health check and utility endpoints
+  /health:
+    get:
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+tags:
+  - name: Events
+    description: Calendar event management
+  - name: Attendees
+    description: Event attendee operations
+  - name: Health
+    description: Service health and monitoring
+
+# Rate limiting information
+x-rateLimit:
+  perUser: 1000 # requests per hour
+  perIP: 10000 # requests per hour
+  burst: 100 # requests per minute
