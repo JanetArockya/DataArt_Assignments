@@ -2,6 +2,7 @@ using AICalendar.Data;
 using AICalendar.Data.Repositories;
 using AICalendar.Domain.Repositories;
 using AICalendar.Domain.Services;
+using AICalendar.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,9 @@ builder.Services.AddDbContext<CalendarDbContext>(options =>
 // Add repositories and services
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ILlmService, LlmService>();
+builder.Services.AddScoped<IMcpService, McpService>();
+builder.Services.AddHttpClient<LlmService>();
 
 // Add CORS for development
 builder.Services.AddCors(options =>
