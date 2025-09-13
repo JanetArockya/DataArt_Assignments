@@ -2,22 +2,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AICalendar.Domain.Models;
 
-public class Event
+/// <summary>
+/// Main Event model with C# 13 Partial Properties
+/// Core properties are implemented as partial properties in separate files
+/// </summary>
+public partial class Event
 {
     public int Id { get; set; }
     
-    [Required]
-    [MaxLength(200)]
-    public string Title { get; set; } = string.Empty;
+    // Title is implemented as partial property in Event.Implementation.cs
+    // [Required] and [MaxLength(200)] validation handled in implementation
     
     [MaxLength(1000)]
     public string? Description { get; set; }
     
-    [Required]
-    public DateTime StartTime { get; set; }
-    
-    [Required]
-    public DateTime EndTime { get; set; }
+    // StartTime and EndTime are implemented as partial properties with validation
     
     [MaxLength(100)]
     public string? Location { get; set; }
@@ -27,7 +26,7 @@ public class Event
     
     public bool IsAllDay { get; set; }
     
-    public EventStatus Status { get; set; } = EventStatus.Confirmed;
+    // Status is implemented as partial property with change tracking
     
     [MaxLength(100)]
     public string? ClientReferenceId { get; set; }

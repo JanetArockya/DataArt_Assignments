@@ -1,0 +1,12 @@
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\bin\Debug\net9.0\AICalendar.Domain.deps.json
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\bin\Debug\net9.0\AICalendar.Domain.dll
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\bin\Debug\net9.0\AICalendar.Domain.pdb
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.AssemblyInfoInputs.cache
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.AssemblyInfo.cs
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.csproj.CoreCompileInputs.cache
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.sourcelink.json
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.dll
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\refint\AICalendar.Domain.dll
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\AICalendar.Domain.pdb
+C:\Users\HP\OneDrive\Documents\.NET Assignment\DataArt_Assignments\src\AICalendar.Domain\obj\Debug\net9.0\ref\AICalendar.Domain.dll

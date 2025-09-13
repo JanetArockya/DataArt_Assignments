@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RVFs23+T7Rc=",
+  "dgSpecHash": "O4TonLIWYGk=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\OneDrive\\Documents\\.NET Assignment\\DataArt_Assignments\\src\\AICalendar.Domain\\AICalendar.Domain.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.20\\microsoft.netcore.app.ref.8.0.20.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.20\\microsoft.windowsdesktop.app.ref.8.0.20.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.20\\microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }
