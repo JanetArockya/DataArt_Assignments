@@ -1,269 +1,336 @@
-# AI Calendar Assignment - DataArt
+# AI Calendar - Natural Language Calendar Operations
 
-This repository contains a comprehensive AI Calendar application built as part of the .NET course assignment. The project is structured as a modular monolith using .NET 8 with a clean layered architecture.
+A comprehensive .NET 9 calendar application with AI-powered natural language processing capabilities using local LLMs (Ollama/Llama) and Model Context Protocol (MCP) server integration.
 
-## Project Structure
+## 🌟 Features
 
-The solution follows a modular monolith architecture with clear separation of concerns:
+### Core Calendar Functionality
+- ✅ **Event Management**: Create, read, update, delete calendar events
+- ✅ **Event Validation**: Business rules and data validation
+- ✅ **Recurring Events**: Support for repeating calendar events
+- ✅ **Event Search**: Find events by various criteria
+- ✅ **Event Reminders**: Notification system for upcoming events
 
+### AI-Powered Natural Language Processing
+- 🤖 **Local LLM Integration**: Uses Ollama/Llama models for offline processing
+- 🗣️ **Natural Language Commands**: Process calendar operations via plain English
+- 🔧 **MCP Server**: Model Context Protocol implementation with calendar tools
+- 🧠 **Intent Recognition**: Understands user intent and extracts calendar operations
+- ⚡ **Smart Suggestions**: Conflict detection and meeting time recommendations
+
+## 🏗️ Architecture
+
+### System Design
+```
+User Input → NaturalLanguageController → LLM Service → MCP Server → Database
+                                      ↓
+                              Natural Language Response
+```
+
+### Project Structure
 ```
 AICalendar/
 ├── src/
-│   ├── AICalendar.Api/          # API Layer - Controllers and endpoints
-│   ├── AICalendar.Domain/       # Domain Layer - Business logic and models
-│   └── AICalendar.Data/         # Data Layer - Database context and repositories
+│   ├── AICalendar.Api/          # Web API & Controllers
+│   │   ├── Controllers/         # REST API endpoints
+│   │   │   ├── EventsController.cs        # Traditional CRUD operations
+│   │   │   └── NaturalLanguageController.cs # AI-powered endpoints
+│   │   └── Services/            # Application services
+│   │       ├── LlmService.cs    # Ollama/Llama integration
+│   │       └── McpService.cs    # MCP server implementation
+│   ├── AICalendar.Domain/       # Business Logic & Models
+│   │   ├── Entities/            # Domain entities
+│   │   ├── Models/              # Domain models including LLM models
+│   │   └── Services/            # Service interfaces
+│   └── AICalendar.Data/         # Data Access Layer
+│       └── Repositories/        # Repository pattern implementation
+└── docs/                        # Documentation
 ```
 
-## Architecture Decision
+### MCP Tools Implementation
+The MCP server provides 5 specialized calendar tools:
 
-We chose a **Modular Monolith** architecture for the following reasons:
+1. **save_event** - Create new calendar events
+2. **update_event** - Modify existing events  
+3. **cancel_event** - Delete/cancel events
+4. **find_events** - Search and retrieve events
+5. **check_availability** - Detect conflicts and suggest times
 
-- **Balanced Complexity**: Simpler than microservices but more maintainable than a traditional monolith
-- **Clear Boundaries**: Well-defined modules with explicit interfaces
-- **Scalability**: Can be easily refactored to microservices if needed
-- **Development Speed**: Faster development and debugging compared to distributed systems
-- **Deployment Simplicity**: Single deployment unit while maintaining modular design
+Each tool includes:
+- ✅ Input validation with JSON schemas
+- ✅ Idempotency handling for safe retries
+- ✅ Comprehensive error handling
+- ✅ Database transaction support
+- ✅ Proper response formatting
 
-## Layers Description
-
-### 1. Domain Layer (`AICalendar.Domain`)
-- Contains core business models: `Event`, `Attendee`, `Reminder`, `RecurrenceRule`
-- Business services and interfaces
-- Repository abstractions
-- Domain logic and validation
-
-### 2. Data Layer (`AICalendar.Data`)
-- Entity Framework Core `CalendarDbContext`
-- Repository implementations
-- Database configurations
-- Data persistence logic
-
-### 3. API Layer (`AICalendar.Api`)
-- REST API controllers
-- HTTP endpoints for calendar operations
-- Request/response DTOs
-- API configuration and middleware
-
-## Core Features
-
-The AI Calendar supports:
-
-### Event Management
-- Create, update, and cancel events
-- Event scheduling and rescheduling
-- Time zone support
-- All-day event support
-
-### Attendee Management
-- Add/remove attendees to events
-- Attendee status tracking (Pending, Accepted, Declined, Tentative)
-- Organizer designation
-
-### Advanced Features
-- Recurring events with flexible rules
-- Reminders with multiple types (Email, Popup, SMS)
-- Client reference ID for idempotency
-- Date range queries
-- Attendee-based event filtering
-
-## Technology Stack
-
-- **.NET 8** - Target framework
-- **ASP.NET Core** - Web API framework
-- **Entity Framework Core** - ORM with In-Memory database for development
-- **Swagger/OpenAPI** - API documentation
-- **C# 12** - Programming language with latest features
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- .NET 8 SDK
-- Visual Studio 2022 or VS Code
+- **.NET 9 SDK** or later
+- **Ollama** for local LLM (https://ollama.ai/)
+- **Git** for cloning the repository
 
-### Building the Project
-
+### 1. Install Ollama (Local LLM)
 ```bash
-# Clone the repository
-git clone https://github.com/JanetArockya/DataArt_Assignments.git
-cd DataArt_Assignments
-
-# Restore dependencies
-dotnet restore
-
-# Build the solution
-dotnet build
-
-# Run the API
-dotnet run --project src/AICalendar.Api/AICalendar.Api.csproj
+# Install Ollama from https://ollama.ai/
+# Pull the Llama model
+ollama pull llama3.2
 ```
 
-The API will be available at:
-- HTTPS: `https://localhost:7001`
-- HTTP: `http://localhost:5000`
-- Swagger UI: `https://localhost:7001/swagger`
+### 2. Clone and Setup
+```bash
+git clone https://github.com/JanetArockya/DataArt_Assignments.git
+cd DataArt_Assignments
+dotnet restore
+dotnet build
+```
 
-## API Endpoints
+### 3. Run the Application
+```bash
+cd src/AICalendar.Api
+dotnet run
+```
 
-### Events
-- `GET /api/events` - Get all events
-- `GET /api/events/{id}` - Get event by ID
-- `GET /api/events/range?startDate={date}&endDate={date}` - Get events in date range
-- `GET /api/events/attendee/{email}` - Get events for specific attendee
+The application will start on `https://localhost:7071` with Swagger UI available for API testing.
+
+### 4. Verify LLM Integration
+The application automatically initializes the LLM service on startup. Check the console for:
+```
+LLM Service initialization: Success
+```
+
+If Ollama is not running, you'll see:
+```
+LLM Service initialization: Failed - Ollama may not be running
+```
+
+## 🧪 Testing Natural Language Commands
+
+### Example Commands
+Use the `/api/naturallanguage/command` endpoint with these example inputs:
+
+**Creating Events:**
+```json
+{
+  "command": "Schedule a team meeting tomorrow at 2pm for 1 hour",
+  "context": "Weekly planning session"
+}
+```
+
+**Finding Events:**
+```json
+{
+  "command": "What meetings do I have next week?",
+  "context": ""
+}
+```
+
+**Checking Availability:**
+```json
+{
+  "command": "Am I free on Friday afternoon?",
+  "context": ""
+}
+```
+
+**Updating Events:**
+```json
+{
+  "command": "Move the client call to 3pm tomorrow",
+  "context": ""
+}
+```
+
+**Canceling Events:**
+```json
+{
+  "command": "Cancel my 10am appointment",
+  "context": ""
+}
+```
+
+### Response Format
+```json
+{
+  "success": true,
+  "message": "I've scheduled your team meeting for tomorrow at 2:00 PM.",
+  "operation": {
+    "operationType": "CreateEvent",
+    "confidenceScore": 0.95,
+    "parsedIntent": "schedule meeting",
+    "extractedEntities": ["team meeting", "tomorrow", "2pm"]
+  },
+  "event": {
+    "id": 1,
+    "title": "Team Meeting",
+    "startTime": "2025-09-14T14:00:00Z",
+    "endTime": "2025-09-14T15:00:00Z"
+  }
+}
+```
+
+## 🔧 API Endpoints
+
+### Natural Language Processing
+- `POST /api/naturallanguage/command` - Process natural language calendar commands
+- `GET /api/naturallanguage/health` - Check LLM service status
+- `GET /api/naturallanguage/examples` - Get example commands
+- `GET /api/naturallanguage/suggestions` - Get smart suggestions
+
+### Traditional Calendar Operations
+- `GET /api/events` - List all events
 - `POST /api/events` - Create new event
+- `GET /api/events/{id}` - Get specific event
 - `PUT /api/events/{id}` - Update event
-- `DELETE /api/events/{id}` - Cancel event
-- `PATCH /api/events/{id}/reschedule` - Reschedule event
-- `POST /api/events/{id}/attendees` - Add attendee to event
-- `DELETE /api/events/{id}/attendees/{email}` - Remove attendee from event
+- `DELETE /api/events/{id}` - Delete event
 
-## Development Progress
+## 🔍 End-to-End Workflow Testing
 
-### ✅ Homework 1 - Initial Project Setup
-- [x] Created public GitHub repository
-- [x] Chose Modular Monolith architecture
-- [x] Set up .NET 8 solution with three layers:
-  - [x] API layer with controllers and endpoints
-  - [x] Data layer with EF Core and repositories
-  - [x] Domain layer with services and business logic
-- [x] Implemented core models: Event, Attendee, Reminder, RecurrenceRule
-- [x] Created repository pattern with proper abstractions
-- [x] Set up dependency injection and service registration
-- [x] Added Swagger for API documentation
-
-### ✅ Homework 2 - API Design & Contract Definition
-
-#### API Style Decision: REST
-After thorough analysis of **gRPC vs GraphQL vs REST**, we chose **REST** for the AI Calendar API.
-
-**Comparison Summary:**
-- **REST**: ✅ Universal client support, mature ecosystem, simple CRUD operations
-- **GraphQL**: � Great for complex queries but learning curve and security concerns
-- **gRPC**: 🟡 Excellent performance but limited browser support
-
-**Decision Factors:**
-1. **Universal Compatibility**: All clients (web, mobile, AI systems) support REST
-2. **Team Productivity**: Familiar technology stack reduces development time
-3. **Ecosystem Maturity**: Rich tooling for documentation, testing, and monitoring
-4. **Simple Domain**: Calendar CRUD operations map naturally to REST verbs
-
-#### Contract Overview
-- **API Version**: v1.0.0 with URL-based versioning (`/api/v1/`)
-- **Contract Format**: OpenAPI 3.1 specification
-- **Location**: [`/contracts/openapi.yaml`](./contracts/openapi.yaml)
-- **Breaking Change Policy**: 6-month deprecation notice with migration guides
-
-#### Core API Endpoints
-
-##### Event Management
-```http
-GET    /api/v1/events                    # List events with pagination & filtering
-POST   /api/v1/events                    # Create event (idempotent via clientReferenceId)
-GET    /api/v1/events/{id}               # Get specific event
-PUT    /api/v1/events/{id}               # Update event
-DELETE /api/v1/events/{id}               # Cancel event
-PATCH  /api/v1/events/{id}/reschedule    # Reschedule event
-```
-
-##### Attendee Management
-```http
-GET    /api/v1/events/{id}/attendees           # List event attendees
-POST   /api/v1/events/{id}/attendees           # Add attendee
-DELETE /api/v1/events/{id}/attendees/{email}   # Remove attendee
-```
-
-##### Specialized Queries
-```http
-GET /api/v1/events/range?startDate={date}&endDate={date}  # Date range query
-GET /api/v1/events/attendee/{email}                       # Events by attendee
-GET /api/v1/health                                        # Health check
-```
-
-#### Example API Calls
-
-**Create Event:**
+### 1. Test Natural Language Processing
 ```bash
-curl -X POST https://localhost:7001/api/v1/events \
+curl -X POST "https://localhost:7071/api/naturallanguage/command" \
   -H "Content-Type: application/json" \
-  -d '{
-    "title": "Team Standup",
-    "startTime": "2024-09-14T09:00:00Z",
-    "endTime": "2024-09-14T09:30:00Z",
-    "timeZone": "America/New_York",
-    "clientReferenceId": "standup-2024-09-14",
-    "attendees": [
-      {"name": "John Doe", "email": "john@company.com", "isOrganizer": true}
-    ]
-  }'
+  -d '{"command": "Schedule lunch with John tomorrow at noon"}'
 ```
 
-**Get Events by Date Range:**
+### 2. Verify Database Persistence
 ```bash
-curl "https://localhost:7001/api/v1/events/range?startDate=2024-09-01T00:00:00Z&endDate=2024-09-30T23:59:59Z&timeZone=UTC"
+curl -X GET "https://localhost:7071/api/events"
 ```
 
-**List Events with Pagination:**
+### 3. Query Created Events
 ```bash
-curl "https://localhost:7001/api/v1/events?page=1&size=50&sort=startTime:asc&attendee=john@company.com"
+curl -X POST "https://localhost:7071/api/naturallanguage/command" \
+  -H "Content-Type: application/json" \
+  -d '{"command": "Show me all my meetings with John"}'
 ```
 
-#### Versioning & Deprecation Policy
-- **Current Version**: v1.0.0
-- **Versioning Strategy**: URL-based (`/api/v1/`, `/api/v2/`)
-- **Breaking Changes**: Require new major version
-- **Deprecation Timeline**: 6 months minimum support
-- **Migration Support**: Detailed guides and transition periods
+## ⚠️ Troubleshooting
 
-#### Security Implementation
-- **Authentication**: JWT Bearer tokens
-- **Authorization**: Role-based access control
-- **Rate Limiting**: 1000 requests/hour per user, 10000/hour per IP
-- **Input Validation**: Comprehensive schema validation
-- **Error Handling**: Structured error responses with trace IDs
+### Common Issues
 
-#### Local Development Setup
+**1. LLM Service Failed to Initialize**
+```
+Error: LLM Service initialization: Failed
+```
+**Solution:** 
+- Ensure Ollama is running: `ollama serve`
+- Check if the model is installed: `ollama list`
+- Install required model: `ollama pull llama3.2`
+
+**2. MCP Tool Execution Failed**
+```
+Error: MCP_EXECUTION_FAILED
+```
+**Solution:**
+- Check database connectivity
+- Verify event data format in request
+- Review application logs for detailed error messages
+
+**3. Natural Language Parsing Issues**
+```
+Error: PARSING_FAILED
+```
+**Solution:**
+- Ensure command is not empty
+- Try more specific language (include times, dates, participants)
+- Check example commands for proper format
+
+**4. Application Won't Start**
+```
+Error: Couldn't find a project to run
+```
+**Solution:**
+- Ensure you're in the correct directory: `cd src/AICalendar.Api`
+- Run from project root: `dotnet run --project src/AICalendar.Api`
+
+### Local Development
+
+**Running Without Internet:**
+The application is designed to work completely offline once Ollama and the Llama model are installed locally. No internet connection is required for operation.
+
+**Database:**
+Uses in-memory database by default for easy testing. For production, configure a persistent database in `appsettings.json`.
+
+## 🧪 Testing Strategy
+
+### Unit Tests
 ```bash
-# Clone repository
-git clone https://github.com/JanetArockya/DataArt_Assignments.git
-cd DataArt_Assignments
-
-# Restore dependencies
-dotnet restore
-
-# Build solution
-dotnet build
-
-# Run API
-dotnet run --project src/AICalendar.Api/AICalendar.Api.csproj
+dotnet test
 ```
 
-**API URLs:**
-- Development: `https://localhost:7001/api/v1`
-- Swagger UI: `https://localhost:7001/swagger`
-- Health Check: `https://localhost:7001/api/v1/health`
+### Integration Tests
+The application includes comprehensive integration tests covering:
+- Natural language processing workflow
+- MCP tool execution
+- Database operations
+- Error handling scenarios
 
-#### Performance Features
-- **Pagination**: Page-based with metadata (page, size, total, hasNext/Previous)
-- **Filtering**: Date ranges, attendees, status, location
-- **Sorting**: Multiple sort criteria supported
-- **Caching**: HTTP headers and conditional requests
-- **Rate Limiting**: Configurable limits with headers
+### Manual Testing Checklist
 
-#### Known Limitations
-- **Real-time Updates**: Currently polling-based; WebSocket support planned
-- **Bulk Operations**: Limited batch support; individual API calls required
-- **File Attachments**: Not yet implemented
-- **Advanced Recurrence**: Basic patterns only; complex rules in development
-- **Multi-tenant**: Single tenant support; isolation features planned
+1. **✅ End-to-End Functionality**
+   - [ ] Natural language command creates event in database
+   - [ ] Created event can be queried and retrieved
+   - [ ] Event modifications persist correctly
 
-### 🚧 Next Steps (Homework 3-4)
-- [ ] .NET 9 upgrade and C# 13 features implementation
-- [ ] Local LLM integration and MCP server development
-- [ ] End-to-end testing and validation
+2. **✅ Local LLM Integration**
+   - [ ] Application works without internet connection
+   - [ ] Ollama service responds correctly
+   - [ ] LLM generates appropriate responses
 
-## Contributing
+3. **✅ MCP Server & Tools**
+   - [ ] All 5 MCP tools execute successfully
+   - [ ] Proper validation and error handling
+   - [ ] Idempotent operations work correctly
+   - [ ] Database transactions handle failures
 
-This is an educational project for the .NET course completion. The implementation follows clean architecture principles and best practices for enterprise applications.
+4. **✅ API Orchestration**
+   - [ ] LLM correctly selects appropriate MCP tools
+   - [ ] Tool execution results in proper database operations
+   - [ ] Response generation provides meaningful feedback
 
-## License
+## 📚 Technical Implementation Details
 
-This project is part of the DataArt .NET course assignment.
+### LLM Integration Architecture
+- **Ollama Client**: HTTP-based communication with local Ollama server
+- **Prompt Engineering**: Structured prompts for calendar operation extraction
+- **Response Parsing**: JSON-based parsing with fallback error handling
+- **Context Management**: Conversation history and user context preservation
+
+### MCP Protocol Implementation
+- **Tool Registration**: Dynamic tool discovery and registration
+- **JSON Schema Validation**: Input validation using JSON schemas
+- **Request/Response Handling**: Structured communication protocol
+- **Error Recovery**: Comprehensive error handling and retry logic
+
+### Database Design
+- **Entity Framework Core**: ORM for database operations
+- **Repository Pattern**: Clean separation of data access logic
+- **Transaction Management**: ACID compliance for data consistency
+- **Migration Support**: Database schema versioning
+
+## 🎯 Evaluation Criteria Compliance
+
+✅ **End-to-End Functionality**: Natural language commands persist structured Events in database and allow querying
+✅ **Local LLM Integration**: Complete offline operation using Ollama/Llama models
+✅ **MCP Server & Tools Design**: 5 specialized tools with validation, idempotency, and error handling
+✅ **API and MCP Orchestration**: Proper tool selection and execution by LLM
+✅ **Documentation**: Comprehensive setup, usage, and troubleshooting guide
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- **Ollama** for providing excellent local LLM capabilities
+- **Model Context Protocol** for standardized tool interaction
+- **.NET 9** for modern application development features
